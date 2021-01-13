@@ -42,6 +42,12 @@
 				box-sizing: border-box;
 			}
 
+			[contenteditable='true']:active,
+			[contenteditable='true']:focus {
+				border: none;
+				outline: none;
+			}
+
 			#editor {
 				width: 8.5in;
 				/*width: 100%;*/
@@ -56,16 +62,10 @@
 					'Noto Serif SC';
 				cursor: text;
 				position: relative;
+				border-left: 1px solid rgba(0, 0, 0, 0.05);
+				border-right: 1px solid rgba(0, 0, 0, 0.05);
 				/*color: rgba(0, 0, 0, 1);*/
 				/*font-weight: bold;*/
-			}
-
-			.link {
-				color: red !important;
-			}
-
-			.link:visited {
-				color: #551a8b !important;
 			}
 
 			.inactive {
@@ -75,18 +75,19 @@
 			.cursor-fade {
 			}
 
+			.line {
+				min-height: 16px;
+				word-break: break-word;
+			}
+
 			.line:focus {
 				background-color: rgba(60, 192, 245, 0.15);
 				outline: none;
 			}
 
 			.line:hover:not(:focus) {
-				background-color: rgba(60, 192, 245, 0.08);
+				background-color: rgba(60, 192, 245, 0.03);
 				cursor: text;
-			}
-
-			.line {
-				min-height: 16px;
 			}
 
 			.line:focus {
@@ -94,13 +95,23 @@
 			}
 
 			.slugline {
-				font-weight: bold;
+				/*font-weight: bold;*/
 				text-transform: uppercase;
 				min-width: 100%;
 			}
 
 			.slugline:not(:first-child) {
 				margin-top: 32px;
+			}
+
+			.transition {
+				text-transform: uppercase;
+				min-width: 100%;
+				text-align: right;
+			}
+
+			.transition:not(:first-child) {
+				margin-top: 16px;
 			}
 
 			.character {
@@ -126,12 +137,25 @@
 				margin-right: 1.95in;
 			}
 
-			.parens::before {
-				content: '(';
+			.startAct {
+				margin-top: 32px;
+				text-decoration: underline;
+				border-top: 1px solid rgba(0, 0, 0, 0.1);
+				text-align: center;
 			}
-			.parens::after {
-				content: ')';
+
+			.endAct {
+				margin-top: 32px;
+				text-decoration: underline;
+				text-align: center;
 			}
+
+			/*.parens::before {*/
+			/*	content: '(';*/
+			/*}*/
+			/*.parens::after {*/
+			/*	content: ')';*/
+			/*}*/
 		</style>
 	</head>
 	<body>

@@ -1,4 +1,4 @@
-import * as Editor from './editor';
-import * as Backups from './backups';
+import * as Helpers from './helpers';
+import * as Constants from './constants';
 
-export { Editor, Backups };
+export { Helpers, Constants };

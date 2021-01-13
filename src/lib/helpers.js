@@ -1,3 +1,5 @@
+import { lineTypes } from './constants';
+
 export function stringToHTML(str) {
 	// If DOMParser is supported, use it
 	const support = (function () {
@@ -21,4 +23,10 @@ export function stringToHTML(str) {
 	const dom = document.createElement('div');
 	dom.innerHTML = str;
 	return dom;
+}
+
+export function getLineTypeFromNode(node) {
+	return [...node.classList].find((c) => {
+		return lineTypes.find((lt) => lt.key === c);
+	});
 }

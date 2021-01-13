@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Simple Screenwriter</title>
+	<title>Screenplayer</title>
 </svelte:head>
 
 <Editor />
