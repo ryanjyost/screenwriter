@@ -1,21 +1,23 @@
 function placeCursorAtEnd(line) {
-	console.log('at end');
-	return placeCursor(line);
+	return placeCursor(line, { pos: line.innerText.length });
 }
 
 function placeCursorAtStart(line) {
-	console.log('at start');
-	return placeCursor(line, 0);
+	return placeCursor(line, { atStart: true });
 }
 
 const defaultExport = {
 	placeCursorAtEnd,
 	placeCursorAtStart,
+	placeCursor,
 };
 
 export default defaultExport;
 
-function placeCursor(line, position) {
+function placeCursor(
+	line,
+	params = { atStart: true, atEnd: false, pos: null }
+) {
 	if (!line) {
 		line = document.activeElement;
 	}
@@ -25,19 +27,25 @@ function placeCursor(line, position) {
 		typeof document.createRange != 'undefined'
 	) {
 		const range = document.createRange();
-		range.setStart(line, position);
+		const selection = window.getSelection();
 
-		// range.selectNodeContents(line);
-
-		if (typeof position === 'undefined') {
-			// put at end by default
-			range.collapse(false);
-		} else {
+		if (params.pos) {
+			line = line.childNodes[0];
+			range.setStart(line, params.pos);
 			range.collapse(true);
+			selection.removeAllRanges();
+			selection.addRange(range);
+		} else {
+			// start or end
+			range.selectNodeContents(line);
+			range.collapse(params.atStart || !params.atEnd);
+			selection.removeAllRanges();
+			selection.addRange(range);
 		}
-
-		const sel = window.getSelection();
-		sel.removeAllRanges();
-		sel.addRange(range);
+	} else if (typeof document.body.createTextRange != 'undefined') {
+		const textRange = document.body.createTextRange();
+		textRange.moveToElementText(line);
+		textRange.collapse(params.atStart);
+		textRange.select();
 	}
 }

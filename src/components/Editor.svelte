@@ -2,49 +2,45 @@
 	import { onMount } from 'svelte';
 	import { Constants } from '../lib';
 	import { activeLine } from '../store';
-	import { initializeEditor, saveBackup, focusLine, changeActiveLineType } from '../actions';
+	import Dispatch, { initializeEditor } from '../actions';
 
 	let windowInnerWidth;
 	let editorRect;
 	let toolbarOpen = true;
 	let currentLineTypeInfo;
+	let showQuickKeys;
 
 	const handleLineTypeClick = (newLineTypeKey) => () => {
-		changeActiveLineType(newLineTypeKey);
+		Dispatch('changeActiveLineType', newLineTypeKey);
 	};
 
-	function toggleToolbar() {
+	function handleToggleToolbar() {
 		toolbarOpen = !toolbarOpen;
-		focusLine($activeLine.node);
+		Dispatch('toggleToolbar');
 	}
 
 	onMount(() => {
 		editorRect = document.getElementById('editor').getBoundingClientRect();
-
-		initializeEditor();
-
 		window.addEventListener('resize', function () {
 			editorRect = document.getElementById('editor').getBoundingClientRect();
 		});
 
-		// save
-		document.addEventListener('keydown', function (e) {
-			const { key, metaKey } = e;
-			if (key === 's' && metaKey) {
-				e.preventDefault();
-				saveBackup();
-			}
-		});
+		initializeEditor();
 	});
 
 	$: currentLineTypeInfo = Constants.lineTypes.find(
 		(lt) => lt.key === $activeLine.type
 	);
+
+	// $: console.log($activeLine)
+
+	$: showQuickKeys =
+		$activeLine && $activeLine.rect && $activeLine.rect.top && editorRect;
 </script>
 
 <svelte:window bind:innerWidth={windowInnerWidth} />
 
-{#if $activeLine && $activeLine.type && editorRect}
+{#if showQuickKeys}
 	<div
 		id="quickKeys"
 		style={`top: ${$activeLine.rect.top - 8}px; left: calc(${
@@ -54,9 +50,9 @@
 		{#if toolbarOpen}
 			<button
 				id="closeToolbarButton"
-				title="Close}"
+				title="Close"
 				class={`lineTypeButton`}
-				on:click|once={toggleToolbar}>
+				on:click|once={handleToggleToolbar}>
 				<i class="fas fa-times" id="closeToolbarIcon" />
 			</button>
 
@@ -81,7 +77,7 @@
 				id={`typeButton-${currentLineTypeInfo.key}`}
 				title={currentLineTypeInfo.label}
 				class={`lineTypeButton`}
-				on:click={toggleToolbar}>
+				on:click={handleToggleToolbar}>
 				{#if currentLineTypeInfo.icon.includes('f')}
 					<i class={currentLineTypeInfo.icon} />
 				{:else}
@@ -92,12 +88,7 @@
 	</div>
 {/if}
 
-<div id="editor">
-	<!--    <div class="action line" contenteditable="true">This is an action line.</div>-->
-	<!--    <div class="character line" contenteditable="true">Character</div>-->
-	<!--    <div class="parens line" contenteditable="true">tired</div>-->
-	<!--    <div class="dialogue line" contenteditable="true">I am saying dialogue.</div>-->
-</div>
+<div id="editor" />
 
 <style>
 	#quickKeys {
@@ -154,11 +145,6 @@
 		font-size: 18px;
 	}
 
-	/*.lineTypeButton:hover {*/
-	/*	!*background-color: rgba(155, 66, 227, 0.1);*!*/
-	/*	color: rgba(155, 66, 227, 0.8) !important;*/
-	/*}*/
-
 	.lineTypeButton:hover i,
 	.lineTypeButton:hover .icon {
 		color: rgba(155, 66, 227, 0.5) !important;
@@ -178,89 +164,4 @@
 	.currentLineType:hover:not(:focus) .icon {
 		color: rgb(155, 66, 227) !important;
 	}
-
-	/*#editor {*/
-	/*	width: 8.5in;*/
-	/*	!*width: 100%;*!*/
-	/*	min-height: 100vh;*/
-	/*	margin: auto;*/
-	/*	padding-top: 1in;*/
-	/*	padding-bottom: 1in;*/
-	/*	padding-left: 1.5in;*/
-	/*	padding-right: 1in;*/
-	/*	font-size: 16px;*/
-	/*	font-family: CourierPrime, Courier, monospace, NotoSerifSC, 'Noto Serif SC';*/
-	/*	border: 1px solid #ccc;*/
-	/*	!*color: rgba(0, 0, 0, 1);*!*/
-	/*	!*font-weight: bold;*!*/
-	/*}*/
-
-	/*.link {*/
-	/*	color: red !important;*/
-	/*}*/
-
-	/*.link:visited {*/
-	/*	color: #551a8b !important;*/
-	/*}*/
-
-	/*.inactive {*/
-	/*	display: none !important;*/
-	/*}*/
-
-	/*.cursor-fade {*/
-	/*}*/
-
-	/*.active,*/
-	/*.line:focus {*/
-	/*	background-color: rgba(60, 192, 245, 0.1);*/
-	/*	outline: none;*/
-	/*}*/
-
-	/*.line {*/
-	/*	min-height: 16px;*/
-	/*}*/
-
-	/*.line:focus {*/
-	/*	outline: none;*/
-	/*}*/
-
-	/*.slugline {*/
-	/*	font-weight: bold;*/
-	/*	text-transform: uppercase;*/
-	/*	min-width: 100%;*/
-	/*}*/
-
-	/*.slugline:not(:first-child) {*/
-	/*	margin-top: 32px;*/
-	/*}*/
-
-	/*.character {*/
-	/*	text-transform: uppercase;*/
-	/*	margin-top: 16px;*/
-	/*	white-space: pre-wrap;*/
-	/*	margin-left: 2in;*/
-	/*	margin-right: 0.25in;*/
-	/*}*/
-
-	/*.dialogue {*/
-	/*	white-space: pre-wrap;*/
-	/*	margin-left: 1in;*/
-	/*	margin-right: 1.55in;*/
-	/*}*/
-
-	/*.action {*/
-	/*	margin-top: 16px;*/
-	/*}*/
-
-	/*.parens {*/
-	/*	margin-left: 1.5in;*/
-	/*	margin-right: 1.95in;*/
-	/*}*/
-
-	/*.parens::before {*/
-	/*	content: '(';*/
-	/*}*/
-	/*.parens::after {*/
-	/*	content: ')';*/
-	/*}*/
 </style>

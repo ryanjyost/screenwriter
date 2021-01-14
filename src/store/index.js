@@ -1,6 +1,5 @@
 import { writable } from 'svelte/store';
 import { get } from 'svelte/store';
-import { Helpers } from '../lib';
 
 export const activeLine = writable({ node: null, type: null, rect: null });
 
@@ -9,16 +8,10 @@ const refs = {
 };
 
 const store = {
-	getValue: (prop) => get(refs[prop]),
+	get: (key) => get(refs[key]),
+	set: (key, payload) => refs[key].set(payload),
 	activeLine: {
 		update: (updated) => activeLine.set(updated),
-		updateFromNode: (node) => {
-			activeLine.set({
-				node,
-				type: Helpers.getLineTypeFromNode(node),
-				rect: document.activeElement.getBoundingClientRect(),
-			});
-		},
 		setType: (type) => activeLine.update((old) => ({ ...old, type })),
 	},
 };

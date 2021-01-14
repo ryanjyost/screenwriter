@@ -1,25 +1,29 @@
 #TODO
 
 - Bold, italic, underline etc. section under line types
-- undo/redo
+- undo/redo, just start with line type first
 - cut/copy/paste
-- super minimal toolbar
-- act format
-- helper text on toolbar icons
-- handle enter/delete
+xxxxxxx- super minimal toolbar
+xxxxxxx- act format
+xxxxxxx- helper text on toolbar icons
+xxxxxxx- handle enter/delete
 - save in database
 - collaboration
 - authentication
 - tab button toggles through main line types
 - the concept of pages
-- enter key at beginning of line
-- select nearest line when clicking anywhere in the editor
+xxxxxxx- enter key at beginning of line
+xxxxxxx- select nearest line when clicking anywhere in the editor
 - collection of projects
 - card view
 - drafts w/ diffs
 - easy to see page and navigation
--print to pdf
-- enter start, enter mid, enter end, delete start, delete mid, delete end
+- print to pdf
+xxxxxxx- enter start, enter mid, enter end, delete start, delete mid, delete end
+xxxxxxx- arrows to go up and down the doc
+- remember where cursor and active line were in localStorage
+xxxxxxx- tab through elements, tab on empty line
+- if start dialogue with paren, change type to paren
 
 # sapper-template
 

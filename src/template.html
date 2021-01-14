@@ -77,7 +77,7 @@
 
 			.line {
 				min-height: 16px;
-				word-break: break-word;
+				white-space: pre-wrap;
 			}
 
 			.line:focus {
@@ -117,13 +117,13 @@
 			.character {
 				text-transform: uppercase;
 				margin-top: 16px;
-				white-space: pre-wrap;
+				/*white-space: pre-wrap;*/
 				margin-left: 2in;
 				margin-right: 0.25in;
 			}
 
 			.dialogue {
-				white-space: pre-wrap;
+				/*white-space: pre-wrap;*/
 				margin-left: 1in;
 				margin-right: 1.55in;
 			}
@@ -150,12 +150,12 @@
 				text-align: center;
 			}
 
-			/*.parens::before {*/
-			/*	content: '(';*/
-			/*}*/
-			/*.parens::after {*/
-			/*	content: ')';*/
-			/*}*/
+			.parens::before {
+				content: '(';
+			}
+			.parens::after {
+				content: ')';
+			}
 		</style>
 	</head>
 	<body>
