@@ -11,6 +11,7 @@ export function initializeEditor() {
 		restoreBackup(backup);
 	} else {
 		appendNewLine('slugline', 'INT. UNKNOWN - DAY');
+		// a screenwriter stares at their computer, on screen is screenplayer.io, this is your first script. Seriously, this is editable. I'm ryan, founder of screenplayer
 	}
 
 	// focus the closest element
@@ -25,8 +26,7 @@ export function initializeEditor() {
 	window.addEventListener('beforeunload', function () {
 		// saveBackup();
 	});
-	window.addEventListener('keydown', _windowKeydownListener);
-	editor.addEventListener('keydown', _editorKeydownEventListener);
+	window.addEventListener('keydown', _windowKeydownEventListener);
 
 	let isMouseDown = false;
 	let intervalId;
@@ -58,45 +58,40 @@ export function initializeEditor() {
 	_cleanup();
 }
 
-function _windowKeydownListener(e) {
-	const { key, metaKey } = e;
-	const keysToListenTo = ['s'];
+function _windowKeydownEventListener(e) {
+	const { key, target, metaKey } = e;
+	const isLine = Dom.isNodeLine(target);
+	console.log({ e });
 
-	if (keysToListenTo.includes(key) && metaKey) {
-		e.preventDefault();
+	const metaKeyPairs = ['s'];
 
+	if (metaKey && metaKeyPairs.includes(key)) {
 		switch (key) {
 			case 's':
-				saveBackup();
+				e.preventDefault();
+				metaKey && saveBackup();
 				break;
-
 			default:
 				break;
 		}
 	}
-}
-
-function _editorKeydownEventListener(e) {
-	const { key, target } = e;
-	const isLine = Dom.isNodeLine(target);
-
-	if (!isLine) return;
 
 	switch (key) {
 		case 'Enter':
-			_handleEnterKey(e);
+			isLine && _handleEnterKey(e);
 			break;
 		case 'Backspace':
+			console.log('backspace');
 			_handleBackspaceKey(e);
 			break;
 		case 'Tab':
-			_handleTabKey(e);
+			isLine && _handleTabKey(e);
 			break;
 		case 'ArrowUp':
-			_handleUpArrow(e);
+			isLine && _handleUpArrow(e);
 			break;
 		case 'ArrowDown':
-			_handleDownArrow(e);
+			isLine && _handleDownArrow(e);
 			break;
 		default:
 			break;
@@ -152,7 +147,6 @@ function _handleBackspaceKey(e) {
 	} else if (!previousLineContent && selection.atStart) {
 		Dispatch('backspaceInLineWithContentNoPreviousLineContent', line);
 	} else if (selection.atStart && line.previousSibling) {
-		console.log('backspaceContentIntoPreviousLine');
 		Dispatch('backspaceContentIntoPreviousLine', line);
 	}
 }

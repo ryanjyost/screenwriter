@@ -29,36 +29,18 @@ export function backspaceContentIntoPreviousLine(node) {
 }
 
 export function backspaceMultipleLines(selection) {
-	console.log({ selection });
 	selection.selection.deleteFromDocument();
 
-	let topNode = selection.startNode,
-		bottomNode = selection.endNode,
-		topLine = selection.startLine,
-		bottomLine = selection.endLine;
+	let topNode = selection.startNode;
+	let bottomNode = selection.endNode;
 
 	if (topNode.offsetTop > bottomNode.offsetTop) {
 		topNode = selection.endNode;
-		bottomNode = selection.startNode;
-		topLine = selection.endLine;
-		bottomLine = selection.startLine;
 	}
 
-	// TODO method to get position depends on sstart end situation, just use range both times maybe
-	const remainingTopNodeText = topLine.textBeforeCursor;
-
-	// const range = window.getSelection().getRangeAt(0);
-	// selection.endNode.focus();
-	// const selectionAfterDelete = window.getSelection();
-	// console.log({ selection, selectionAfterDelete });
-
-	// need to clean up end node, place cursor, focus
-	// const { target } = e;
-	//
-	// const selection = Dom.getSelection();
-	// console.log('MULTIPE LINES', {selection, range});
-	// let startLine, endLine;
-	// const node = document.getElementById(selection.endNode);
 	Lines.focusLine(topNode);
-	Cursor.placeCursorAtEnd(topNode);
+
+	if (selection.startAtTop) {
+		Cursor.placeCursor(null, { pos: selection.anchorOffset });
+	}
 }

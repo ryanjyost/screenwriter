@@ -26,19 +26,23 @@ function placeCursor(
 		typeof window.getSelection != 'undefined' &&
 		typeof document.createRange != 'undefined'
 	) {
-		const range = document.createRange();
-		const selection = window.getSelection();
-
 		if (params.pos) {
+			const range = document.createRange();
+			const selection = window.getSelection();
+
 			line = line.childNodes[0];
+			console.log({ line });
 			range.setStart(line, params.pos);
 			range.collapse(true);
+
 			selection.removeAllRanges();
 			selection.addRange(range);
 		} else {
 			// start or end
+			const range = document.createRange();
 			range.selectNodeContents(line);
-			range.collapse(params.atStart || !params.atEnd);
+			range.collapse(params.atStart);
+			const selection = window.getSelection();
 			selection.removeAllRanges();
 			selection.addRange(range);
 		}

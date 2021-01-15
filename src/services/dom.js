@@ -36,7 +36,8 @@ function getSelection() {
 	const startNode =
 		selection.anchorNode && selection.anchorNode.id
 			? selection.anchorNode
-			: selection.anchorNode.parentNode;
+			: selection.anchorNode && selection.anchorNode.parentNode;
+
 	const startLineContentLength = startNode.textContent.length;
 	const startLineCursorPosition = selection.anchorOffset;
 
@@ -49,15 +50,37 @@ function getSelection() {
 	let endLineCursorPosition = selection.focusOffset;
 
 	const multipleLines = startNode.id !== endNode.id;
-
+	//
 	// if (multipleLines) {
-	// 	// endNode.focus();
-	// 	const selectionEndNode = window.getSelection();
-	// 	console.log(selection.toString());
-	// 	console.log({ selectionEndNode, endNode });
-	// 	endLineCursorPosition = selectionEndNode.anchorOffset;
-	// 	// endNode.blur();
+	// 	const range = window.getSelection().getRangeAt(0);
+	// 	endNode.focus();
+	// 	const selectionAfterDelete = window.getSelection();
+	// 	console.log({ selection, selectionAfterDelete });
 	// }
+
+	const startLine = {
+		length: startLineContentLength,
+		textBeforeCursor: startNode.textContent.slice(0, startLineCursorPosition),
+		textAfterCursor: startNode.textContent.slice(startLineCursorPosition),
+	};
+
+	const endLine = {
+		length: endLineContentLength,
+		textBeforeCursor: endNode.textContent.slice(0, endLineCursorPosition),
+		textAfterCursor: endNode.textContent.slice(endLineCursorPosition),
+	};
+
+	let topNode = startNode,
+		bottomNode = endNode,
+		topLine = startLine,
+		bottomLine = endLine;
+
+	if (topNode.offsetTop > bottomNode.offsetTop) {
+		topNode = selection.endNode;
+		bottomNode = selection.startNode;
+		topLine = selection.endLine;
+		bottomLine = selection.startLine;
+	}
 
 	return {
 		selection,
@@ -67,16 +90,13 @@ function getSelection() {
 		multipleLines,
 		startNode,
 		endNode,
-		startLine: {
-			length: startLineContentLength,
-			textBeforeCursor: startNode.textContent.slice(0, startLineCursorPosition),
-			textAfterCursor: startNode.textContent.slice(startLineCursorPosition),
-		},
-		endLine: {
-			length: endLineContentLength,
-			textBeforeCursor: endNode.textContent.slice(0, endLineCursorPosition),
-			textAfterCursor: endNode.textContent.slice(endLineCursorPosition),
-		},
+		startLine,
+		endLine,
+		topNode,
+		bottomNode,
+		topLine,
+		bottomLine,
+		startAtTop: topNode && topNode.id === startNode.id,
 	};
 }
 

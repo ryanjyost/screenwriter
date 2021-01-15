@@ -41,12 +41,6 @@ function blurLine(node) {
 
 	setTimeout(() => {
 		node.setAttribute('contenteditable', 'false');
-		// try {
-		// 	node.focus();
-		// 	updateActiveLine(node);
-		// } catch (e) {
-		// 	console.log(e);
-		// }
 	}, 10);
 }
 
@@ -137,6 +131,7 @@ function createNewLineNode(type = 'action', innerHTML = '') {
 	line.addEventListener('blur', function (e) {
 		e.target.setAttribute('contenteditable', 'false');
 	});
+
 	line.addEventListener(
 		'focus',
 		function (e) {
@@ -144,6 +139,7 @@ function createNewLineNode(type = 'action', innerHTML = '') {
 		},
 		true
 	);
+
 	line.addEventListener('mouseup', function (e) {
 		e.target.setAttribute('contenteditable', 'true');
 	});

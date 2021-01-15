@@ -1,7 +1,7 @@
 import { Backups, Dom, Lines } from '../../services';
 import { Helpers } from '../../lib';
 
-export * from './enterInsideLine';
+export * from './enter';
 export * from './backspace';
 
 export function toggleToolbar() {
