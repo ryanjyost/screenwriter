@@ -26,6 +26,7 @@ function isNodeLine(node) {
 function getSelection() {
 	const selection = window.getSelection();
 
+	// save selection props so that they aren't references
 	const clone = {};
 	for (let p in selection) {
 		if (typeof selection[p] !== 'function') {
@@ -38,65 +39,101 @@ function getSelection() {
 			? selection.anchorNode
 			: selection.anchorNode && selection.anchorNode.parentNode;
 
-	const startLineContentLength = startNode.textContent.length;
-	const startLineCursorPosition = selection.anchorOffset;
-
 	const endNode =
 		selection.focusNode && selection.focusNode.id
 			? selection.focusNode
 			: selection.focusNode.parentNode;
 
-	const endLineContentLength = endNode.textContent.length;
-	let endLineCursorPosition = selection.focusOffset;
-
-	const multipleLines = startNode.id !== endNode.id;
-	//
-	// if (multipleLines) {
-	// 	const range = window.getSelection().getRangeAt(0);
-	// 	endNode.focus();
-	// 	const selectionAfterDelete = window.getSelection();
-	// 	console.log({ selection, selectionAfterDelete });
-	// }
-
-	const startLine = {
-		length: startLineContentLength,
-		textBeforeCursor: startNode.textContent.slice(0, startLineCursorPosition),
-		textAfterCursor: startNode.textContent.slice(startLineCursorPosition),
-	};
-
-	const endLine = {
-		length: endLineContentLength,
-		textBeforeCursor: endNode.textContent.slice(0, endLineCursorPosition),
-		textAfterCursor: endNode.textContent.slice(endLineCursorPosition),
-	};
-
 	let topNode = startNode,
-		bottomNode = endNode,
-		topLine = startLine,
-		bottomLine = endLine;
+		bottomNode = endNode;
 
 	if (topNode.offsetTop > bottomNode.offsetTop) {
-		topNode = selection.endNode;
-		bottomNode = selection.startNode;
-		topLine = selection.endLine;
-		bottomLine = selection.startLine;
+		topNode = endNode;
+		bottomNode = startNode;
 	}
+
+	const topLineContent = topNode.textContent;
+	const bottomLineContent = bottomNode.textContent;
+
+	const topContentLength = topLineContent.length;
+	const bottomContentLength = bottomLineContent.length;
+	const topLineCursorPosition = selection.anchorOffset;
+	const bottomLineCursorPosition = selection.focusOffset;
+
+	// console.log({ selection, topLineContent, topLineCursorPosition });
+
+	let topTextBeforeCursor = topNode.textContent.slice(0, topLineCursorPosition);
+	let topTextAfterCursor = topNode.textContent.slice(topLineCursorPosition);
+
+	let bottomTextBeforeCursor = bottomNode.textContent.slice(
+		0,
+		bottomLineCursorPosition
+	);
+	let bottomTextAfterCursor = bottomNode.textContent.slice(
+		bottomLineCursorPosition
+	);
+
+	const multipleLines = topNode.id !== bottomNode.id;
+
+	const selectedText = selection.toString();
+	const selectedTextByLine = selectedText.split(/\r?\n/);
+
+	if (multipleLines) {
+		const selectedTextTop = selectedTextByLine[0];
+		const selectedTextBottom =
+			selectedTextByLine[selectedTextByLine.length - 1];
+
+		topTextAfterCursor = selectedTextTop;
+		topTextBeforeCursor = topLineContent.slice(
+			0,
+			topLineContent.length - topTextAfterCursor.length
+		);
+
+		bottomTextBeforeCursor = selectedTextByLine[selectedTextByLine.length - 1];
+		bottomTextAfterCursor = bottomLineContent.slice(
+			bottomLineContent.length - bottomTextAfterCursor.length
+		);
+
+		// console.log({
+		// 	startLineContent,
+		// 	startTextAfterCursor,
+		// 	startTextBeforeCursor,
+		// 	endLineContent,
+		// 	endTextBeforeCursor,
+		// 	endTextAfterCursor,
+		// });
+	}
+	//
+	// const startLine = {
+	// 	length: startLineContentLength,
+	// 	textBeforeCursor: startTextBeforeCursor,
+	// 	textAfterCursor: startTextAfterCursor,
+	// };
+	//
+	// const endLine = {
+	// 	length: endLineContentLength,
+	// 	textBeforeCursor: endTextBeforeCursor,
+	// 	textAfterCursor: endTextAfterCursor,
+	// };
 
 	return {
 		selection,
 		...clone,
+		topLineContent,
+		topTextAfterCursor,
+		topTextBeforeCursor,
+		bottomLineContent,
+		bottomTextBeforeCursor,
+		bottomTextAfterCursor,
 		atStart: !selection.anchorOffset,
-		atEnd: selection.anchorOffset === startLineContentLength,
+		atEnd: selection.anchorOffset === topContentLength,
 		multipleLines,
 		startNode,
 		endNode,
-		startLine,
-		endLine,
 		topNode,
 		bottomNode,
-		topLine,
-		bottomLine,
 		startAtTop: topNode && topNode.id === startNode.id,
+		selectedText,
 	};
 }
 

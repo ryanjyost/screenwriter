@@ -12,7 +12,7 @@ function updateActiveLine(node) {
 	});
 }
 
-function focusLine(node) {
+function focusLine(node, callback) {
 	if (!node) {
 		const activeLine = Store.get('activeLine');
 		node = document.getElementById(activeLine.id);
@@ -28,7 +28,11 @@ function focusLine(node) {
 		} catch (e) {
 			console.log(e);
 		}
-	}, 10);
+	}, 50);
+
+	setTimeout(() => {
+		callback && callback();
+	}, 50);
 }
 
 function blurLine(node) {
@@ -111,6 +115,9 @@ function getNextLineTypeTabKey(type) {
 			nextType = 'dialogue';
 			break;
 		case 'dialogue':
+			nextType = 'parens';
+			break;
+		case 'parens':
 			nextType = 'slugline';
 			break;
 		default:
@@ -141,7 +148,10 @@ function createNewLineNode(type = 'action', innerHTML = '') {
 	);
 
 	line.addEventListener('mouseup', function (e) {
-		e.target.setAttribute('contenteditable', 'true');
+		const selection = Dom.getSelection();
+		if (!selection.multipleLines) {
+			e.target.setAttribute('contenteditable', 'true');
+		}
 	});
 
 	return line;

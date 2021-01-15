@@ -2,8 +2,8 @@ import { Cursor, Lines, Dom } from '../../services';
 
 export function backspaceInEmptyLine(node) {
 	if (node.previousSibling) {
-		Lines.focusLine(node.previousSibling);
-		Cursor.placeCursorAtEnd(node.previousSibling);
+		Lines.focusLine(node.previousSibling, () => Cursor.placeCursorAtEnd());
+
 		node.remove();
 	} else {
 		Lines.focusLine(node);
@@ -17,6 +17,7 @@ export function backspaceInLineWithContentNoPreviousLineContent(node) {
 }
 
 export function backspaceContentIntoPreviousLine(node) {
+	console.log('backspaceContentIntoPreviousLine');
 	const prevLine = document.getElementById(node.previousSibling.id);
 	const preLineTextBeforeUpdate = prevLine.innerText.toString();
 
@@ -24,23 +25,24 @@ export function backspaceContentIntoPreviousLine(node) {
 
 	node.remove();
 
-	Lines.focusLine(prevLine);
-	Cursor.placeCursor(prevLine, { pos: preLineTextBeforeUpdate.length });
+	Lines.focusLine(prevLine, () =>
+		Cursor.placeCursor(prevLine, preLineTextBeforeUpdate.length)
+	);
 }
 
 export function backspaceMultipleLines(selection) {
 	selection.selection.deleteFromDocument();
 
-	let topNode = selection.startNode;
-	let bottomNode = selection.endNode;
+	const { topNode, bottomNode } = selection;
 
-	if (topNode.offsetTop > bottomNode.offsetTop) {
-		topNode = selection.endNode;
-	}
+	topNode.innerHTML =
+		selection.topTextBeforeCursor + selection.bottomTextAfterCursor;
 
-	Lines.focusLine(topNode);
+	bottomNode.remove();
 
-	if (selection.startAtTop) {
-		Cursor.placeCursor(null, { pos: selection.anchorOffset });
-	}
+	Lines.focusLine(topNode, () => {
+		if (selection.startAtTop) {
+			Cursor.placeCursor(topNode.id, selection.anchorOffset);
+		}
+	});
 }

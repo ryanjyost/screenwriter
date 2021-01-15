@@ -1,9 +1,9 @@
-function placeCursorAtEnd(line) {
-	return placeCursor(line, { pos: line.innerText.length });
+function placeCursorAtEnd(lineId) {
+	return placeCursor(lineId);
 }
 
-function placeCursorAtStart(line) {
-	return placeCursor(line, { atStart: true });
+function placeCursorAtStart(lineId) {
+	return placeCursor(lineId, 0);
 }
 
 const defaultExport = {
@@ -14,38 +14,59 @@ const defaultExport = {
 
 export default defaultExport;
 
-function placeCursor(
-	line,
-	params = { atStart: true, atEnd: false, pos: null }
-) {
-	if (!line) {
-		line = document.activeElement;
-	}
-
+function placeCursor(lineId, position) {
 	if (
 		typeof window.getSelection != 'undefined' &&
 		typeof document.createRange != 'undefined'
 	) {
-		if (params.pos) {
+		var line = document.getElementById(lineId);
+
+		// Creates range object
+		const range = document.createRange();
+
+		// Creates object for selection
+		const selection = window.getSelection();
+
+		if (!line) {
+			line = document.activeElement;
+		}
+
+		if (position && position > 0) {
 			const range = document.createRange();
 			const selection = window.getSelection();
 
-			line = line.childNodes[0];
+			// line = line.childNodes[0];
 			console.log({ line });
-			range.setStart(line, params.pos);
+			range.setStart(line.firstChild, position);
 			range.collapse(true);
 
 			selection.removeAllRanges();
 			selection.addRange(range);
-		} else {
-			// start or end
-			const range = document.createRange();
-			range.selectNodeContents(line);
-			range.collapse(params.atStart);
-			const selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(range);
 		}
+
+		if (!position) {
+			position = line.innerText.length;
+		}
+
+		// Set start position of range
+		try {
+			range.setStart(line.childNodes[0], position);
+		} catch (e) {
+			console.error(e);
+		}
+
+		// Collapse range within its boundary points
+		// Returns boolean
+		range.collapse(true);
+
+		// Remove all ranges set
+		selection.removeAllRanges();
+
+		// Add range with respect to range object.
+		selection.addRange(range);
+
+		// Set cursor on focus
+		// line.focus();
 	} else if (typeof document.body.createTextRange != 'undefined') {
 		const textRange = document.body.createTextRange();
 		textRange.moveToElementText(line);

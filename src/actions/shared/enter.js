@@ -1,16 +1,13 @@
 import { Cursor, Dom, Lines } from '../../services';
 
 export function enterAtStartOfLine(node) {
+	console.log('start of line');
 	const lineType = Lines.getLineTypeFromNode(node);
 	const newLine = Lines.createNewLineNode(lineType, node.innerHTML);
 	Dom.insertNodeAfter(newLine, node);
-	Lines.focusLine(newLine);
+	Lines.focusLine(newLine, () => Cursor.placeCursorAtStart(newLine.id));
 
 	node.innerHTML = '';
-
-	setTimeout(() => {
-		Cursor.placeCursorAtStart();
-	}, 10);
 }
 
 export function enterAtEndOfLine(node) {
@@ -29,10 +26,10 @@ export function enterInsideOfLine(node) {
 
 	const newLine = Lines.createNewLineNode(
 		nextLineType,
-		selection.startLine.textAfterCursor
+		selection.topTextAfterCursor
 	);
 
-	node.innerHTML = selection.startLine.textBeforeCursor;
+	node.innerHTML = selection.topTextBeforeCursor;
 	Dom.insertNodeAfter(newLine, node);
 	Lines.focusLine(newLine);
 }
