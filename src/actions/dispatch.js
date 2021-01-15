@@ -7,6 +7,7 @@ import {
 	backspaceInEmptyLine,
 	backspaceInLineWithContentNoPreviousLineContent,
 	backspaceContentIntoPreviousLine,
+	backspaceMultipleLines,
 } from './shared';
 
 export default function dispatch(type, payload) {
@@ -41,6 +42,10 @@ export default function dispatch(type, payload) {
 
 		case 'backspaceContentIntoPreviousLine':
 			backspaceContentIntoPreviousLine(payload);
+			break;
+
+		case 'backspaceMultipleLines':
+			backspaceMultipleLines(payload);
 			break;
 
 		default:

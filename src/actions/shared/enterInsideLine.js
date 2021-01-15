@@ -29,10 +29,10 @@ export function enterInsideOfLine(node) {
 
 	const newLine = Lines.createNewLineNode(
 		nextLineType,
-		selection.content.afterCursor
+		selection.startLine.textAfterCursor
 	);
 
-	node.innerHTML = selection.content.beforeCursor;
+	node.innerHTML = selection.startLine.textBeforeCursor;
 	Dom.insertNodeAfter(newLine, node);
 	Lines.focusLine(newLine);
 }

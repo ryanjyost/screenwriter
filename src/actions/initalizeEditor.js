@@ -1,6 +1,7 @@
 import { Lines, Dom, Cursor } from '../services';
 import { restoreBackup, saveBackup, appendNewLine } from './shared';
 import Dispatch from './dispatch';
+import Store from '../store';
 
 export function initializeEditor() {
 	const backup = window.localStorage.getItem('backup');
@@ -9,7 +10,6 @@ export function initializeEditor() {
 	if (backup) {
 		restoreBackup(backup);
 	} else {
-		// TODO run animation for welcome or something
 		appendNewLine('slugline', 'INT. UNKNOWN - DAY');
 	}
 
@@ -22,18 +22,38 @@ export function initializeEditor() {
 		}
 	});
 
-	window.addEventListener('mouseup', function (e) {
-		console.log({ e });
-		const selection = Dom.getSelection();
-		console.log({ selection });
-	});
-
 	window.addEventListener('beforeunload', function () {
 		// saveBackup();
 	});
-
 	window.addEventListener('keydown', _windowKeydownListener);
 	editor.addEventListener('keydown', _editorKeydownEventListener);
+
+	let isMouseDown = false;
+	let intervalId;
+	let didBlur = false;
+
+	window.addEventListener('mouseup', function (e) {
+		const selection = Dom.getSelection();
+		isMouseDown = false;
+		clearInterval(intervalId);
+		didBlur = false;
+	});
+
+	window.addEventListener('mousedown', function (e) {
+		const selection = Dom.getSelection();
+		isMouseDown = true;
+
+		intervalId = setInterval(() => {
+			if (!didBlur) {
+				const activeLine = Store.get('activeLine');
+				const node = document.getElementById(activeLine.id);
+
+				Lines.blurLine(node);
+
+				didBlur = true;
+			}
+		}, 50);
+	});
 
 	_cleanup();
 }
@@ -109,19 +129,18 @@ function _handleTabKey(e) {
 }
 
 function _handleBackspaceKey(e) {
-	console.log('BACKSPACE');
 	const { target: line } = e;
 	const selection = Dom.getSelection();
 
-	console.log({ selection, line });
+	if (selection.type === 'Range' && selection.multipleLines) {
+		return Dispatch('backspaceMultipleLines', selection);
+	} else if (selection.type === 'Range') {
+		return;
+	}
 
 	// just delete normally
 	if (!selection.atStart) return;
-	console.log('at start');
-	if (selection.type === 'Range') return;
-	console.log('not range');
 	if (!line.previousSibling) return;
-	console.log('has prev sibling');
 
 	e.preventDefault();
 
@@ -133,6 +152,7 @@ function _handleBackspaceKey(e) {
 	} else if (!previousLineContent && selection.atStart) {
 		Dispatch('backspaceInLineWithContentNoPreviousLineContent', line);
 	} else if (selection.atStart && line.previousSibling) {
+		console.log('backspaceContentIntoPreviousLine');
 		Dispatch('backspaceContentIntoPreviousLine', line);
 	}
 }

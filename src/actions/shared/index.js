@@ -2,7 +2,7 @@ import { Backups, Dom, Lines } from '../../services';
 import { Helpers } from '../../lib';
 
 export * from './enterInsideLine';
-export * from './backspaceInsideLine';
+export * from './backspace';
 
 export function toggleToolbar() {
 	Lines.focusLine();

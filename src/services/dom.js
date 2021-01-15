@@ -33,29 +33,50 @@ function getSelection() {
 		}
 	}
 
-	const textContent = selection.anchorNode.textContent;
-	const contentLength = textContent.length;
-	const cursorPosition = selection.anchorOffset;
+	const startNode =
+		selection.anchorNode && selection.anchorNode.id
+			? selection.anchorNode
+			: selection.anchorNode.parentNode;
+	const startLineContentLength = startNode.textContent.length;
+	const startLineCursorPosition = selection.anchorOffset;
 
-	const content = {
-		length: contentLength,
-		beforeCursor: textContent.slice(0, cursorPosition),
-		afterCursor: textContent.slice(cursorPosition),
-	};
+	const endNode =
+		selection.focusNode && selection.focusNode.id
+			? selection.focusNode
+			: selection.focusNode.parentNode;
 
-	const startNode = selection.anchorNode.parentNode;
-	const endNode = selection.extentNode.parentNode;
+	const endLineContentLength = endNode.textContent.length;
+	let endLineCursorPosition = selection.focusOffset;
+
+	const multipleLines = startNode.id !== endNode.id;
+
+	// if (multipleLines) {
+	// 	// endNode.focus();
+	// 	const selectionEndNode = window.getSelection();
+	// 	console.log(selection.toString());
+	// 	console.log({ selectionEndNode, endNode });
+	// 	endLineCursorPosition = selectionEndNode.anchorOffset;
+	// 	// endNode.blur();
+	// }
 
 	return {
 		selection,
 		...clone,
-		content,
-		atStart:
-			selection.type.toLowerCase() === 'caret' && !selection.anchorOffset,
-		atEnd: selection.anchorOffset === contentLength,
-		multipleLines: startNode.id !== endNode.id,
+		atStart: !selection.anchorOffset,
+		atEnd: selection.anchorOffset === startLineContentLength,
+		multipleLines,
 		startNode,
 		endNode,
+		startLine: {
+			length: startLineContentLength,
+			textBeforeCursor: startNode.textContent.slice(0, startLineCursorPosition),
+			textAfterCursor: startNode.textContent.slice(startLineCursorPosition),
+		},
+		endLine: {
+			length: endLineContentLength,
+			textBeforeCursor: endNode.textContent.slice(0, endLineCursorPosition),
+			textAfterCursor: endNode.textContent.slice(endLineCursorPosition),
+		},
 	};
 }
 

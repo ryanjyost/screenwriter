@@ -31,6 +31,25 @@ function focusLine(node) {
 	}, 10);
 }
 
+function blurLine(node) {
+	if (!node) {
+		const activeLine = Store.get('activeLine');
+		node = document.getElementById(activeLine.id);
+
+		if (!node) return;
+	}
+
+	setTimeout(() => {
+		node.setAttribute('contenteditable', 'false');
+		// try {
+		// 	node.focus();
+		// 	updateActiveLine(node);
+		// } catch (e) {
+		// 	console.log(e);
+		// }
+	}, 10);
+}
+
 function changeActiveLineType(newType) {
 	const activeLine = Store.get('activeLine');
 	const node = document.getElementById(activeLine.node.id);
@@ -139,6 +158,7 @@ function createNewLineNodeFromNode(node) {
 
 const defaultExport = {
 	focusLine,
+	blurLine,
 	changeLineType,
 	changeActiveLineType,
 	getLineTypeFromNode,
