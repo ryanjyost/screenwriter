@@ -9,8 +9,18 @@ import {
 	backspaceContentIntoPreviousLine,
 	backspaceMultipleLines,
 } from './shared';
+import { Dom } from '../services';
+
+const nonHistoryActions = ['toggleToolbar'];
 
 export default function dispatch(type, payload) {
+	let snapshotBefore, snapshotAfter;
+
+	if (!nonHistoryActions.includes(type)) {
+		snapshotBefore = Dom.getEditor().innerHTML;
+		console.log({ snapshotBefore });
+	}
+
 	switch (type) {
 		case 'toggleToolbar':
 			toggleToolbar();

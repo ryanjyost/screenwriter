@@ -19,7 +19,7 @@ function placeCursor(lineId, position) {
 		typeof window.getSelection != 'undefined' &&
 		typeof document.createRange != 'undefined'
 	) {
-		var line = document.getElementById(lineId);
+		let line = document.getElementById(lineId);
 
 		// Creates range object
 		const range = document.createRange();
@@ -35,8 +35,6 @@ function placeCursor(lineId, position) {
 			const range = document.createRange();
 			const selection = window.getSelection();
 
-			// line = line.childNodes[0];
-			console.log({ line });
 			range.setStart(line.firstChild, position);
 			range.collapse(true);
 
@@ -44,7 +42,7 @@ function placeCursor(lineId, position) {
 			selection.addRange(range);
 		}
 
-		if (!position) {
+		if (typeof position === 'undefined') {
 			position = line.innerText.length;
 		}
 
@@ -52,7 +50,11 @@ function placeCursor(lineId, position) {
 		try {
 			range.setStart(line.childNodes[0], position);
 		} catch (e) {
-			console.error(e);
+			try {
+				range.setStart(line, position);
+			} catch (e) {
+				range.setStart(line, 0);
+			}
 		}
 
 		// Collapse range within its boundary points

@@ -198,16 +198,12 @@ function _handleEnterKey(e) {
 	const selection = Dom.getSelection();
 
 	if (isEmpty && lineType !== 'action') {
-		console.log('at 1');
 		Dispatch('changeActiveLineType', 'action');
 	} else if (selection.atStart && !isEmpty) {
-		console.log('at 2');
 		Dispatch('enterAtStartOfLine', line);
 	} else if (selection.atEnd) {
-		console.log('at end');
 		Dispatch('enterAtEndOfLine', line);
 	} else {
-		console.log('at 4');
 		Dispatch('enterInsideOfLine', line);
 	}
 }

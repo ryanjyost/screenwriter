@@ -91,30 +91,9 @@ function getSelection() {
 
 		bottomTextBeforeCursor = selectedTextByLine[selectedTextByLine.length - 1];
 		bottomTextAfterCursor = bottomLineContent.slice(
-			bottomLineContent.length - bottomTextAfterCursor.length
+			bottomTextBeforeCursor.length
 		);
-
-		// console.log({
-		// 	startLineContent,
-		// 	startTextAfterCursor,
-		// 	startTextBeforeCursor,
-		// 	endLineContent,
-		// 	endTextBeforeCursor,
-		// 	endTextAfterCursor,
-		// });
 	}
-	//
-	// const startLine = {
-	// 	length: startLineContentLength,
-	// 	textBeforeCursor: startTextBeforeCursor,
-	// 	textAfterCursor: startTextAfterCursor,
-	// };
-	//
-	// const endLine = {
-	// 	length: endLineContentLength,
-	// 	textBeforeCursor: endTextBeforeCursor,
-	// 	textAfterCursor: endTextAfterCursor,
-	// };
 
 	return {
 		selection,

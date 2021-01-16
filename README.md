@@ -10,7 +10,7 @@ xxxxxxx- handle enter/delete
 - save in database
 - collaboration
 - authentication
-- tab button toggles through main line types
+xxxxxxx- tab button toggles through main line types
 - the concept of pages
 xxxxxxx- enter key at beginning of line
 xxxxxxx- select nearest line when clicking anywhere in the editor

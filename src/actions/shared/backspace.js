@@ -17,7 +17,6 @@ export function backspaceInLineWithContentNoPreviousLineContent(node) {
 }
 
 export function backspaceContentIntoPreviousLine(node) {
-	console.log('backspaceContentIntoPreviousLine');
 	const prevLine = document.getElementById(node.previousSibling.id);
 	const preLineTextBeforeUpdate = prevLine.innerText.toString();
 
@@ -41,8 +40,6 @@ export function backspaceMultipleLines(selection) {
 	bottomNode.remove();
 
 	Lines.focusLine(topNode, () => {
-		if (selection.startAtTop) {
-			Cursor.placeCursor(topNode.id, selection.anchorOffset);
-		}
+		Cursor.placeCursor(topNode.id, selection.topTextBeforeCursor.length);
 	});
 }

@@ -1,13 +1,11 @@
 import { Cursor, Dom, Lines } from '../../services';
 
 export function enterAtStartOfLine(node) {
-	console.log('start of line');
+	const currentLine = document.getElementById(node.id);
 	const lineType = Lines.getLineTypeFromNode(node);
-	const newLine = Lines.createNewLineNode(lineType, node.innerHTML);
-	Dom.insertNodeAfter(newLine, node);
-	Lines.focusLine(newLine, () => Cursor.placeCursorAtStart(newLine.id));
-
-	node.innerHTML = '';
+	const newLine = Lines.createNewLineNode(lineType);
+	Dom.insertNodeBefore(newLine, node);
+	Lines.focusLine(currentLine, () => Cursor.placeCursorAtStart(currentLine.id));
 }
 
 export function enterAtEndOfLine(node) {
