@@ -4,13 +4,14 @@ import { v4 as uuid } from 'uuid';
 import Dom from './dom';
 
 function updateActiveLine(node) {
-	node.classList.add('active');
+	const line = document.getElementById(node.id);
+	line.classList.add('active');
 
 	Store.set('activeLine', {
-		node,
-		id: node.id,
-		type: getLineTypeFromNode(node),
-		rect: document.activeElement.getBoundingClientRect(),
+		node: line,
+		id: line.id,
+		type: getLineTypeFromNode(line),
+		rect: line.getBoundingClientRect(),
 	});
 }
 
@@ -22,9 +23,9 @@ function focusLine(node, callback) {
 		if (!node) return;
 	}
 
+	const parentNode = document.getElementById(node.parentNode.id);
+
 	if (!Dom.isNodeLine(node)) {
-		// clicked a <b>, etc.
-		const parentNode = document.getElementById(node.parentNode.id);
 		updateActiveLine(parentNode);
 		parentNode.classList.add('active');
 	} else {
@@ -32,12 +33,29 @@ function focusLine(node, callback) {
 		node.classList.add('active');
 	}
 
-	node.setAttribute('contenteditable', 'true');
-	node.focus();
+	setTimeout(() => {
+		node.setAttribute('contenteditable', 'true');
+		try {
+			node.focus();
+
+			if (Dom.isNodeLine(node)) {
+				node.classList.add('active');
+			} else {
+				parentNode &&
+					Dom.isNodeLine(parentNode) &&
+					parentNode.classList.add('active');
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	}, 5);
+
+	// node.setAttribute('contenteditable', 'true');
+	// node.focus();
 
 	setTimeout(() => {
 		callback && callback();
-	}, 10);
+	}, 50);
 }
 
 function blurLine(node) {
@@ -161,18 +179,14 @@ function createNewLineNode(type = 'action', innerHTML = '') {
 	line.addEventListener(
 		'blur',
 		function (e) {
-			console.log('BLUR', e.target);
 			if (Dom.isNodeLine(e.target)) {
-				// console.log('IS LINE');
 				const line = document.getElementById(e.target.id);
 				line.classList.remove('active');
 				line.setAttribute('contenteditable', 'false');
 			} else {
-				console.log('NOT LINE');
 				const line = document.getElementById(e.target.parentNode.id);
 				line.classList.remove('active');
 				line.setAttribute('contenteditable', 'false');
-				console.log({ line });
 			}
 		},
 		true

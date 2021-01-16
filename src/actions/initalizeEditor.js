@@ -56,9 +56,8 @@ export function initializeEditor() {
 
 	// focus the closest element
 	editor.addEventListener('click', function (e) {
-		const selection = Dom.getSelection();
-
 		if (Dom.isNodeEditor(e.target)) {
+			const selection = Dom.getSelection();
 			if (!selection.multipleLines) _focusClosestLine(e);
 		} else {
 			Lines.focusLine(e.target);

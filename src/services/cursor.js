@@ -31,7 +31,7 @@ function placeCursor(lineId, position) {
 			line = document.activeElement;
 		}
 
-		if (position && position > 0) {
+		if (typeof position !== 'undefined') {
 			const range = document.createRange();
 			const selection = window.getSelection();
 
@@ -40,9 +40,7 @@ function placeCursor(lineId, position) {
 
 			selection.removeAllRanges();
 			selection.addRange(range);
-		}
-
-		if (typeof position === 'undefined') {
+		} else {
 			position = line.innerText.length;
 		}
 

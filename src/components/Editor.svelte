@@ -32,7 +32,7 @@
 		(lt) => lt.key === $activeLine.type
 	);
 
-	// $: console.log($activeLine)
+	// $: console.log({activeLine: $activeLine});
 
 	$: showQuickKeys =
 		$activeLine && $activeLine.rect && $activeLine.rect.top && editorRect;
