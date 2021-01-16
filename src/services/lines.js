@@ -4,6 +4,8 @@ import { v4 as uuid } from 'uuid';
 import Dom from './dom';
 
 function updateActiveLine(node) {
+	node.classList.add('active');
+
 	Store.set('activeLine', {
 		node,
 		id: node.id,
@@ -13,6 +15,7 @@ function updateActiveLine(node) {
 }
 
 function focusLine(node, callback) {
+	console.log('focus line');
 	if (!node) {
 		const activeLine = Store.get('activeLine');
 		node = document.getElementById(activeLine.id);
@@ -30,14 +33,15 @@ function focusLine(node, callback) {
 		node.classList.add('active');
 	}
 
-	setTimeout(() => {
-		node.setAttribute('contenteditable', 'true');
-		try {
-			node.focus();
-		} catch (e) {
-			console.log(e);
-		}
-	}, 5);
+	node.setAttribute('contenteditable', 'true');
+	// node.focus();
+
+	// setTimeout(() => {
+	// 	try {
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	}
+	// }, 5);
 
 	setTimeout(() => {
 		callback && callback();
@@ -154,13 +158,13 @@ function createNewLineNode(type = 'action', innerHTML = '') {
 	line.setAttribute('tabindex', '0');
 	line.setAttribute('contenteditable', 'false');
 
-	line.addEventListener(
-		'focus',
-		function (e) {
-			if (Dom.isNodeLine(e.target)) updateActiveLine(e.target);
-		},
-		true
-	);
+	// line.addEventListener(
+	// 	'focus',
+	// 	function (e) {
+	// 		if (Dom.isNodeLine(e.target)) updateActiveLine(e.target);
+	// 	},
+	// 	true
+	// );
 
 	line.addEventListener(
 		'blur',
@@ -173,6 +177,10 @@ function createNewLineNode(type = 'action', innerHTML = '') {
 				line.setAttribute('contenteditable', 'false');
 			} else {
 				console.log('NOT LINE');
+				const line = document.getElementById(e.target.parentNode.id);
+				line.classList.remove('active');
+				line.setAttribute('contenteditable', 'false');
+				console.log({ line });
 			}
 		},
 		true

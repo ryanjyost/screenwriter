@@ -75,8 +75,8 @@ export function initializeEditor() {
 	let didBlur = false;
 
 	window.addEventListener('mouseup', function (e) {
-		const selection = Dom.getSelection();
-		clearInterval(intervalId);
+		if (intervalId) clearInterval(intervalId);
+
 		isMouseDown = false;
 		didBlur = false;
 	});
@@ -86,8 +86,7 @@ export function initializeEditor() {
 		isMouseDown = true;
 
 		intervalId = setInterval(() => {
-			if (isMouseDown && !didBlur) {
-				console.log('UH OH');
+			if (isMouseDown && !didBlur && selection.type === 'Range') {
 				const activeLine = Store.get('activeLine');
 				const node = document.getElementById(activeLine.id);
 
