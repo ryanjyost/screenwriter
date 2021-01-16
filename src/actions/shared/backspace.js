@@ -39,6 +39,9 @@ export function backspaceMultipleLines(selection) {
 
 	bottomNode.remove();
 
+	console.log('=== Multiple Lines ====');
+	console.log({ selection });
+
 	Lines.focusLine(topNode, () => {
 		Cursor.placeCursor(topNode.id, selection.topTextBeforeCursor.length);
 	});

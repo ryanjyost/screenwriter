@@ -15,7 +15,6 @@ function updateActiveLine(node) {
 }
 
 function focusLine(node, callback) {
-	console.log('focus line');
 	if (!node) {
 		const activeLine = Store.get('activeLine');
 		node = document.getElementById(activeLine.id);
@@ -34,14 +33,7 @@ function focusLine(node, callback) {
 	}
 
 	node.setAttribute('contenteditable', 'true');
-	// node.focus();
-
-	// setTimeout(() => {
-	// 	try {
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 	}
-	// }, 5);
+	node.focus();
 
 	setTimeout(() => {
 		callback && callback();

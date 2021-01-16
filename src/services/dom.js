@@ -99,6 +99,26 @@ function getSelection() {
 		);
 	}
 
+	console.log({
+		selection,
+		...clone,
+		topLineContent,
+		topTextAfterCursor,
+		topTextBeforeCursor,
+		bottomLineContent,
+		bottomTextBeforeCursor,
+		bottomTextAfterCursor,
+		atStart: !selection.anchorOffset,
+		atEnd: selection.anchorOffset === topContentLength,
+		multipleLines,
+		startNode,
+		endNode,
+		topNode,
+		bottomNode,
+		startAtTop: topNode && topNode.id === startNode.id,
+		selectedText,
+	});
+
 	return {
 		selection,
 		...clone,

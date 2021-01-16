@@ -68,5 +68,5 @@ export default function dispatch(type, payload) {
 		after,
 	});
 
-	console.log({ before, after });
+	// console.log({ before, after });
 }

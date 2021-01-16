@@ -24,6 +24,7 @@ xxxxxxx- arrows to go up and down the doc
 - remember where cursor and active line were in localStorage
 xxxxxxx- tab through elements, tab on empty line
 - if start dialogue with paren, change type to paren
+- restore highlight/selection after undo
 
 # sapper-template
 
