@@ -42,14 +42,18 @@ function getSelection() {
 	const endNode =
 		selection.focusNode && selection.focusNode.id
 			? selection.focusNode
-			: selection.focusNode.parentNode;
+			: selection.focusNode && selection.focusNode.parentNode;
 
 	let topNode = startNode,
 		bottomNode = endNode;
 
-	if (topNode.offsetTop > bottomNode.offsetTop) {
+	if (topNode && bottomNode && topNode.offsetTop > bottomNode.offsetTop) {
 		topNode = endNode;
 		bottomNode = startNode;
+	} else if (!topNode) {
+		topNode = bottomNode;
+	} else if (!bottomNode) {
+		bottomNode = topNode;
 	}
 
 	const topLineContent = topNode.textContent;

@@ -20,19 +20,28 @@ function focusLine(node, callback) {
 		if (!node) return;
 	}
 
+	if (!Dom.isNodeLine(node)) {
+		// clicked a <b>, etc.
+		const parentNode = document.getElementById(node.parentNode.id);
+		updateActiveLine(parentNode);
+		parentNode.classList.add('active');
+	} else {
+		updateActiveLine(node);
+		node.classList.add('active');
+	}
+
 	setTimeout(() => {
 		node.setAttribute('contenteditable', 'true');
 		try {
 			node.focus();
-			updateActiveLine(node);
 		} catch (e) {
 			console.log(e);
 		}
-	}, 50);
+	}, 5);
 
 	setTimeout(() => {
 		callback && callback();
-	}, 50);
+	}, 10);
 }
 
 function blurLine(node) {
@@ -43,8 +52,17 @@ function blurLine(node) {
 		if (!node) return;
 	}
 
+	node.blur();
+
 	setTimeout(() => {
 		node.setAttribute('contenteditable', 'false');
+		node.classList.remove('active');
+
+		console.log('REMOVE CLASS', node);
+
+		// [...node.childList].map((child) => {
+		// 	console.log({ child });
+		// });
 	}, 10);
 }
 
@@ -134,10 +152,7 @@ function createNewLineNode(type = 'action', innerHTML = '') {
 	line.innerHTML = innerHTML;
 	line.setAttribute('id', uuid());
 	line.setAttribute('tabindex', '0');
-
-	line.addEventListener('blur', function (e) {
-		e.target.setAttribute('contenteditable', 'false');
-	});
+	line.setAttribute('contenteditable', 'false');
 
 	line.addEventListener(
 		'focus',
@@ -147,11 +162,27 @@ function createNewLineNode(type = 'action', innerHTML = '') {
 		true
 	);
 
+	line.addEventListener(
+		'blur',
+		function (e) {
+			console.log('BLUR', e.target);
+			if (Dom.isNodeLine(e.target)) {
+				// console.log('IS LINE');
+				const line = document.getElementById(e.target.id);
+				line.classList.remove('active');
+				line.setAttribute('contenteditable', 'false');
+			} else {
+				console.log('NOT LINE');
+			}
+		},
+		true
+	);
+
 	line.addEventListener('mouseup', function (e) {
-		const selection = Dom.getSelection();
-		if (!selection.multipleLines) {
-			e.target.setAttribute('contenteditable', 'true');
-		}
+		// const selection = Dom.getSelection();
+		// if (!selection.multipleLines) {
+		// 	e.target.setAttribute('contenteditable', 'true');
+		// }
 	});
 
 	return line;

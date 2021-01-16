@@ -80,7 +80,8 @@
 				white-space: pre-wrap;
 			}
 
-			.line:focus {
+			.line:focus,
+			.active {
 				background-color: rgba(60, 192, 245, 0.15);
 				outline: none;
 			}
@@ -88,6 +89,11 @@
 			.line:hover:not(:focus) {
 				background-color: rgba(60, 192, 245, 0.03);
 				cursor: text;
+			}
+
+			.active:hover {
+				background-color: rgba(60, 192, 245, 0.15) !important;
+				outline: none;
 			}
 
 			.line:focus {

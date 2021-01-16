@@ -15,7 +15,6 @@ export function changeActiveLineType(newLineType) {
 export function appendNewLine(type, innerHTML) {
 	const newLine = Lines.createNewLineNode(type, innerHTML);
 	Dom.appendNode(newLine);
-	Lines.focusLine(newLine);
 }
 
 export function saveBackup() {

@@ -9,16 +9,15 @@ import {
 	backspaceContentIntoPreviousLine,
 	backspaceMultipleLines,
 } from './shared';
-import { Dom } from '../services';
+import { Dom, History } from '../services';
 
 const nonHistoryActions = ['toggleToolbar'];
 
 export default function dispatch(type, payload) {
-	let snapshotBefore, snapshotAfter;
+	let before, after;
 
 	if (!nonHistoryActions.includes(type)) {
-		snapshotBefore = Dom.getEditor().innerHTML;
-		console.log({ snapshotBefore });
+		before = Dom.getEditor().innerHTML;
 	}
 
 	switch (type) {
@@ -61,4 +60,13 @@ export default function dispatch(type, payload) {
 		default:
 			break;
 	}
+
+	after = Dom.getEditor().innerHTML;
+
+	History.saveRecord({
+		before,
+		after,
+	});
+
+	console.log({ before, after });
 }

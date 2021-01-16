@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import DeviceDetector from 'device-detector-js';
-import { Lines, Dom, Cursor } from '../services';
+import { Lines, Dom, Cursor, History } from '../services';
 import { restoreBackup, saveBackup, appendNewLine } from './shared';
 import Dispatch from './dispatch';
 import Store from '../store';
@@ -59,7 +59,9 @@ export function initializeEditor() {
 		const selection = Dom.getSelection();
 
 		if (Dom.isNodeEditor(e.target)) {
-			// if (!selection.multipleLines) _focusClosestLine(e);
+			if (!selection.multipleLines) _focusClosestLine(e);
+		} else {
+			Lines.focusLine(e.target);
 		}
 	});
 
@@ -68,14 +70,14 @@ export function initializeEditor() {
 	});
 	window.addEventListener('keydown', _windowKeydownEventListener);
 
-	let isMouseDown = false;
 	let intervalId;
+	let isMouseDown = false;
 	let didBlur = false;
 
 	window.addEventListener('mouseup', function (e) {
 		const selection = Dom.getSelection();
-		isMouseDown = false;
 		clearInterval(intervalId);
+		isMouseDown = false;
 		didBlur = false;
 	});
 
@@ -84,16 +86,18 @@ export function initializeEditor() {
 		isMouseDown = true;
 
 		intervalId = setInterval(() => {
-			if (!didBlur) {
+			if (isMouseDown && !didBlur) {
+				console.log('UH OH');
 				const activeLine = Store.get('activeLine');
 				const node = document.getElementById(activeLine.id);
 
 				Lines.blurLine(node);
-
 				didBlur = true;
 			}
-		}, 50);
+		}, 100);
 	});
+
+	History.initialize();
 }
 
 function _windowKeydownEventListener(e) {
