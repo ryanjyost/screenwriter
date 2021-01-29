@@ -3,6 +3,8 @@ import { Helpers } from '../../lib';
 
 export * from './enter';
 export * from './backspace';
+export * from './textStyle';
+export * from './cutCopyPaste';
 
 export function toggleToolbar() {
 	Lines.focusLine();

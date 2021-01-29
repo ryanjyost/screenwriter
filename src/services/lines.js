@@ -4,6 +4,8 @@ import { v4 as uuid } from 'uuid';
 import Dom from './dom';
 
 function updateActiveLine(node) {
+	if (!node) return;
+
 	const line = document.getElementById(node.id);
 	line.classList.add('active');
 
@@ -55,7 +57,7 @@ function focusLine(node, callback) {
 
 	setTimeout(() => {
 		callback && callback();
-	}, 50);
+	}, 20);
 }
 
 function blurLine(node) {

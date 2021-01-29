@@ -28,7 +28,7 @@ export function initializeEditor() {
 			'action',
 			`A genius SCREENWRITER stares at ${deviceToDisplay}, on a quest to find the free screenwriting software of their dreams.`
 		);
-		appendNewLine('action', `The clock strikes ${time}.`);
+		appendNewLine('action', `Beat. The clock strikes ${time}.`);
 		appendNewLine('slugline', '<b>ON SCREEN</b>');
 		appendNewLine(
 			'action',
@@ -43,9 +43,10 @@ export function initializeEditor() {
 			'dialogue',
 			`This page is already your first project on Screenplayer.`
 		);
+		appendNewLine('parens', `beat`);
 		appendNewLine(
-			'action',
-			`The screenwriter plays around with their new script, checking out the refreshingly minimalistic features.`
+			'dialogue',
+			`Just edit it directly and explore other features. `
 		);
 
 		// a screenwriter stares at their computer, on screen is screenplayer.io, this is your first script. Seriously, this is editable. I'm ryan, founder of screenplayer
@@ -102,13 +103,17 @@ function _windowKeydownEventListener(e) {
 	const { key, target, metaKey } = e;
 	const isLine = Dom.isNodeLine(target);
 
-	const metaKeyPairs = ['s'];
+	const metaKeyPairs = ['s', 'x'];
 
 	if (metaKey && metaKeyPairs.includes(key)) {
 		switch (key) {
 			case 's':
 				e.preventDefault();
-				metaKey && saveBackup();
+				saveBackup();
+				break;
+			case 'x':
+				e.preventDefault();
+				metaKey && _handleCut(e);
 				break;
 			default:
 				break;
@@ -133,6 +138,16 @@ function _windowKeydownEventListener(e) {
 			break;
 		default:
 			break;
+	}
+}
+
+function _handleCut(e) {
+	const selection = Dom.getSelection();
+
+	if (selection.type === 'Range' && selection.multipleLines) {
+		Dispatch('cutMultipleLines', selection);
+	} else if (selection.type === 'Range') {
+		console.log('RANGE');
 	}
 }
 

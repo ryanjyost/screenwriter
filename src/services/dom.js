@@ -56,7 +56,7 @@ function getSelection() {
 		bottomNode = topNode;
 	}
 
-	const topLineContent = topNode.textContent;
+	const topLineContent = topNode ? topNode.textContent : '';
 	const bottomLineContent = bottomNode.textContent;
 
 	const topContentLength = topLineContent.length;
@@ -140,6 +140,17 @@ function getSelection() {
 	};
 }
 
+function deleteLinesFromSelection(selection) {
+	selection.selection.deleteFromDocument();
+
+	const { topNode, bottomNode } = selection;
+
+	topNode.innerHTML =
+		selection.topTextBeforeCursor + selection.bottomTextAfterCursor;
+
+	bottomNode.remove();
+}
+
 const defaultExport = {
 	getEditor,
 	insertNodeAfter,
@@ -148,6 +159,7 @@ const defaultExport = {
 	getSelection,
 	isNodeEditor,
 	isNodeLine,
+	deleteLinesFromSelection,
 };
 
 export default defaultExport;

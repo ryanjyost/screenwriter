@@ -8,12 +8,17 @@ import {
 	backspaceInLineWithContentNoPreviousLineContent,
 	backspaceContentIntoPreviousLine,
 	backspaceMultipleLines,
+	changeFullLineTextStyle,
+	cutMultipleLines,
+	cutTextSelection,
 } from './shared';
 import { Dom, History } from '../services';
 
 const nonHistoryActions = ['toggleToolbar'];
 
 export default function dispatch(type, payload) {
+	console.log('DISPATCH', type);
+
 	let before, after;
 
 	if (!nonHistoryActions.includes(type)) {
@@ -24,7 +29,6 @@ export default function dispatch(type, payload) {
 		case 'toggleToolbar':
 			toggleToolbar();
 			break;
-
 		case 'changeActiveLineType':
 			changeActiveLineType(payload);
 			break;
@@ -55,6 +59,18 @@ export default function dispatch(type, payload) {
 
 		case 'backspaceMultipleLines':
 			backspaceMultipleLines(payload);
+			break;
+
+		case 'changeFullLineTextStyle':
+			changeFullLineTextStyle(payload);
+			break;
+
+		case 'cutMultipleLines':
+			cutMultipleLines(payload);
+			break;
+
+		case 'cutTextSelection':
+			cutTextSelection(payload);
 			break;
 
 		default:

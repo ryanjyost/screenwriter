@@ -14,6 +14,10 @@
 		Dispatch('changeActiveLineType', newLineTypeKey);
 	};
 
+	const handleTextStyleClick = (newTextStyle) => () => {
+		Dispatch('changeFullLineTextStyle', newTextStyle);
+	};
+
 	function handleToggleToolbar() {
 		toolbarOpen = !toolbarOpen;
 		Dispatch('toggleToolbar');
@@ -72,6 +76,18 @@
 					{/if}
 				</button>
 			{/each}
+
+			<hr />
+
+			{#each Constants.textStyles as { key, label, icon, iconSize }}
+				<button
+					id={`textStyleButton-${key}`}
+					title={label}
+					class="textStyleButton"
+					on:click={handleTextStyleClick(key)}>
+					<i class={icon} />
+				</button>
+			{/each}
 		{:else}
 			<button
 				id={`typeButton-${currentLineTypeInfo.key}`}
@@ -119,7 +135,8 @@
 		font-size: 16px;
 	}
 
-	.lineTypeButton {
+	.lineTypeButton,
+	.textStyleButton {
 		display: flex;
 		align-items: center;
 		padding: 0px 5px;
@@ -146,7 +163,9 @@
 	}
 
 	.lineTypeButton:hover i,
-	.lineTypeButton:hover .icon {
+	.lineTypeButton:hover .icon,
+	.textStyleButton:hover i,
+	.textStyleButton:hover .icon {
 		color: rgba(155, 66, 227, 0.5) !important;
 	}
 

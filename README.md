@@ -1,4 +1,4 @@
-#TODO
+# TODO
 
 - Bold, italic, underline etc. section under line types
 - undo/redo, just start with line type first
@@ -25,6 +25,10 @@ xxxxxxx- arrows to go up and down the doc
 xxxxxxx- tab through elements, tab on empty line
 - if start dialogue with paren, change type to paren
 - restore highlight/selection after undo
+
+## BUGS
+- Hit enter with partial styled text at beginning, middle, end
+
 
 # sapper-template
 

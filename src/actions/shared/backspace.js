@@ -30,17 +30,9 @@ export function backspaceContentIntoPreviousLine(node) {
 }
 
 export function backspaceMultipleLines(selection) {
-	selection.selection.deleteFromDocument();
+	Dom.deleteLinesFromSelection(selection);
 
-	const { topNode, bottomNode } = selection;
-
-	topNode.innerHTML =
-		selection.topTextBeforeCursor + selection.bottomTextAfterCursor;
-
-	bottomNode.remove();
-
-	console.log('=== Multiple Lines ====');
-	console.log({ selection });
+	const { topNode } = selection;
 
 	Lines.focusLine(topNode, () => {
 		Cursor.placeCursor(topNode.id, selection.topTextBeforeCursor.length);
