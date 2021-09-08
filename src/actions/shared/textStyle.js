@@ -13,7 +13,7 @@ export function changeFullLineTextStyle(newStyle) {
 	const newStyleElement = Constants.textStylesReference[newStyle].element;
 
 	if (!node.children.length) {
-		// node.innerHTML = `<${newStyleElement}>${node.innerHTML}</${newStyleElement}>`;
+		node.innerHTML = `<${newStyleElement}>${node.innerHTML}</${newStyleElement}>`;
 	}
 
 	console.log({ newStyleElement, node });

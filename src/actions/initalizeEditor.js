@@ -26,22 +26,18 @@ export function initializeEditor() {
 		appendNewLine('slugline', `<b>INT. UNKNOWN - ${slugTime}</b>`);
 		appendNewLine(
 			'action',
-			`A genius SCREENWRITER stares at ${deviceToDisplay}, on a quest to find the free screenwriting software of their dreams.`
+			`A genius SCREENWRITER stares at ${deviceToDisplay}`
 		);
 		appendNewLine('action', `Beat. The clock strikes ${time}.`);
 		appendNewLine('slugline', '<b>ON SCREEN</b>');
 		appendNewLine(
 			'action',
-			`The free screenwriting software of your dreams...`
-		);
-		appendNewLine(
-			'action',
-			`<b>SCREENPLAYER</b>. Built by a normal dude named RYAN (27).`
+			`An attempt by Ryan (28) to start making screenwriting software.`
 		);
 		appendNewLine('character', `Ryan`);
 		appendNewLine(
 			'dialogue',
-			`This page is already your first project on Screenplayer.`
+			`This page is already your first project.`
 		);
 		appendNewLine('parens', `beat`);
 		appendNewLine(
@@ -103,7 +99,7 @@ function _windowKeydownEventListener(e) {
 	const { key, target, metaKey } = e;
 	const isLine = Dom.isNodeLine(target);
 
-	const metaKeyPairs = ['s', 'x'];
+	const metaKeyPairs = ['s', 'x', 'b', 'i', 'u'];
 
 	if (metaKey && metaKeyPairs.includes(key)) {
 		switch (key) {
@@ -114,6 +110,10 @@ function _windowKeydownEventListener(e) {
 			case 'x':
 				e.preventDefault();
 				metaKey && _handleCut(e);
+				break;
+			case 'b':
+				e.preventDefault();
+				console.log('BOLD');
 				break;
 			default:
 				break;

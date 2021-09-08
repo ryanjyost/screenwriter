@@ -20,14 +20,14 @@ export const lineTypes = [
 ];
 
 export const textStyles = [
-	// { key: 'bold', label: 'Bold', icon: 'fas fa-bold', element: 'b' },
-	// { key: 'italic', label: 'Italic', icon: 'fas fa-italic', element: 'i' },
-	// {
-	// 	key: 'underline',
-	// 	label: 'Underline',
-	// 	icon: 'fas fa-underline',
-	// 	element: 'u',
-	// },
+	{ key: 'bold', label: 'Bold', icon: 'fas fa-bold', element: 'b' },
+	{ key: 'italic', label: 'Italic', icon: 'fas fa-italic', element: 'i' },
+	{
+		key: 'underline',
+		label: 'Underline',
+		icon: 'fas fa-underline',
+		element: 'u',
+	},
 ];
 
 export const textStylesReference = textStyles.reduce((acc, curr) => {
