@@ -8,13 +8,15 @@
     "build-sapper": "sapper build --legacy",
     "export": "sapper export --legacy",
     "start": "node __sapper__/build",
-    "prettier": "prettier --write --svelte-sort-order scripts-markup-styles ./**/*.svelte"
+    "prettier": "prettier --write --svelte-sort-order scripts-markup-styles ./**/*.svelte",
+    "deploy": "npm run clean && npm run export && node ./scripts/deploy.js"
   },
   "dependencies": {
     "@rollup/plugin-json": "^4.1.0",
     "compression": "^1.7.1",
     "date-fns": "^2.16.1",
     "device-detector-js": "^2.2.7",
+    "gh-pages": "^3.2.3",
     "polka": "next",
     "rollup-plugin-css-only": "^3.1.0",
     "sirv": "^1.0.0",
