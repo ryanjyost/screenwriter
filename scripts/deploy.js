@@ -1,7 +1,7 @@
 const ghpages = require('gh-pages');
 
 ghpages.publish(
-  '__sapper__/export',
+  '__sapper__/export/screenwriter',
   {
     branch: 'main',
     repo: 'git@github.com:ryanjyost/screenwriter.git',
